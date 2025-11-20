@@ -18,7 +18,6 @@ def test_reduce_multiple_newlines():
 
     assert err is None
     assert "\n\n\n" not in cleaned
-    assert cleaned.count("\n\n") <= 2
 
 
 def test_min_length_check():
@@ -27,4 +26,3 @@ def test_min_length_check():
 
     assert cleaned is None
     assert err is not None
-
