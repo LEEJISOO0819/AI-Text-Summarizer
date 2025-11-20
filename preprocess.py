@@ -2,41 +2,24 @@
 import re
 import unicodedata
 
-<<<<<<< HEAD
-EMOJI_PATTERN = re.compile(
-    "["
-    u"\U0001F600-\U0001F64F"
-    u"\U0001F300-\U0001F5FF"
-    u"\U0001F680-\U0001F6FF"
-    u"\U0001F1E0-\U0001F1FF"
-=======
 # Emoji pattern (commonly used ranges)
 EMOJI_PATTERN = re.compile(
-    "["
+    "[" 
     u"\U0001F600-\U0001F64F"  # emoticons
     u"\U0001F300-\U0001F5FF"  # symbols & pictographs
     u"\U0001F680-\U0001F6FF"  # transport & map symbols
     u"\U0001F1E0-\U0001F1FF"  # flags
->>>>>>> main
     "]+",
     flags=re.UNICODE
 )
 
-<<<<<<< HEAD
-URL_PATTERN = re.compile(r'https?://\S+|www\.\S+')
-HTML_TAG_PATTERN = re.compile(r'<[^>]+>')
-CONTROL_CHAR_PATTERN = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]')
-
-def clean_text(text, min_length=50):
-    """Text preprocessing function with minimum length option."""
-=======
-# URL pattern (http(s) / www)
+# URL pattern (http(s):// or www.)
 URL_PATTERN = re.compile(r'https?://\S+|www\.\S+')
 
 # HTML tag pattern
 HTML_TAG_PATTERN = re.compile(r'<[^>]+>')
 
-# Control characters (0x00–0x1F, 0x7F), except newline and tab
+# Control characters (0x00–0x1F, 0x7F), excluding newline and tab
 CONTROL_CHAR_PATTERN = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]')
 
 
@@ -51,30 +34,11 @@ def clean_text(text: str, min_length: int = 50):
     Returns:
         (cleaned_text_or_None, error_message_or_None)
     """
->>>>>>> main
     if text is None:
         return None, "Input text is None."
     if not isinstance(text, str):
         return None, "Input must be a string."
 
-<<<<<<< HEAD
-    text = unicodedata.normalize("NFKC", text)
-    text = text.replace("\r\n", "\n").replace("\r", "\n")
-    text = URL_PATTERN.sub("", text)
-    text = HTML_TAG_PATTERN.sub("", text)
-    text = EMOJI_PATTERN.sub("", text)
-    text = CONTROL_CHAR_PATTERN.sub("", text)
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    lines = [line.strip() for line in text.split("\n")]
-    text = "\n".join(lines).strip()
-    text = " ".join(text.split())
-
-    if len(text) < min_length:
-        return None, f"Text too short (min {min_length} chars). Current {len(text)}."
-
-    return text, None
-=======
     # Normalize unicode characters (NFKC standardization)
     text = unicodedata.normalize("NFKC", text)
 
@@ -99,7 +63,7 @@ def clean_text(text: str, min_length: int = 50):
     # Reduce multiple newlines to at most 2
     text = re.sub(r"\n{3,}", "\n\n", text)
 
-    # Trim each line individually and rejoin to preserve structure
+    # Trim each line individually and rejoin
     lines = [line.strip() for line in text.split("\n")]
     text = "\n".join(lines).strip()
 
@@ -114,6 +78,7 @@ def clean_text(text: str, min_length: int = 50):
 
 
 if __name__ == "__main__":
+    # Example usage
     samples = [
         "Hello😀😀 thanks for visiting! https://example.com <b>bold</b>\r\n\r\n\n\nextra text",
         "short",
@@ -125,4 +90,3 @@ if __name__ == "__main__":
         print("CLEANED :", repr(cleaned))
         print("ERROR   :", err)
         print("---")
->>>>>>> main
