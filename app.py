@@ -1,27 +1,28 @@
 # app.py
 import streamlit as st
 from preprocess import clean_text
-from summarizer import TextSummarizer  # 클래스 임포트
+from summarizer import TextSummarizer
 
-# Streamlit 페이지 설정
+# Page config
 st.set_page_config(page_title="AI Text Summarizer", layout="wide")
 
 st.title("AI Text Summarizer")
-st.write("Enter your text below and click **Summarize**.")
+st.write("Enter your text below and click **Summarize**. Minimum 50 characters.")
 
-# 사용자 입력
+# Input area
 user_input = st.text_area("Input Text", height=250)
 
-# TextSummarizer 클래스 인스턴스 생성
-summarizer = TextSummarizer()
+# Length selection
+length = st.selectbox("Select Summary Length", ["Short", "Medium", "Long"])
 
-# 요약 버튼 클릭 시 동작
+# Summarize button
 if st.button("Summarize"):
     cleaned, error = clean_text(user_input, min_length=50)
-
     if error:
         st.error(f"Preprocessing failed: {error}")
     else:
-        summary = summarizer.summarize(cleaned, max_length=120)
+        summarizer = TextSummarizer()
+        max_len = 60 if length=="Short" else 100 if length=="Medium" else 150
+        summary = summarizer.summarize(cleaned, max_length=max_len)
         st.subheader("Summary Result")
         st.write(summary)
