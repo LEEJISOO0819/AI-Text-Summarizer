@@ -4,7 +4,7 @@ import unicodedata
 
 # Emoji pattern (commonly used ranges)
 EMOJI_PATTERN = re.compile(
-    "["
+    "[" 
     u"\U0001F600-\U0001F64F"  # emoticons
     u"\U0001F300-\U0001F5FF"  # symbols & pictographs
     u"\U0001F680-\U0001F6FF"  # transport & map symbols
@@ -13,13 +13,13 @@ EMOJI_PATTERN = re.compile(
     flags=re.UNICODE
 )
 
-# URL pattern (http(s) / www)
+# URL pattern (http(s):// or www.)
 URL_PATTERN = re.compile(r'https?://\S+|www\.\S+')
 
 # HTML tag pattern
 HTML_TAG_PATTERN = re.compile(r'<[^>]+>')
 
-# Control characters (0x00–0x1F, 0x7F), except newline and tab
+# Control characters (0x00–0x1F, 0x7F), excluding newline and tab
 CONTROL_CHAR_PATTERN = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]')
 
 
@@ -63,7 +63,7 @@ def clean_text(text: str, min_length: int = 50):
     # Reduce multiple newlines to at most 2
     text = re.sub(r"\n{3,}", "\n\n", text)
 
-    # Trim each line individually and rejoin to preserve structure
+    # Trim each line individually and rejoin
     lines = [line.strip() for line in text.split("\n")]
     text = "\n".join(lines).strip()
 
@@ -78,6 +78,7 @@ def clean_text(text: str, min_length: int = 50):
 
 
 if __name__ == "__main__":
+    # Example usage
     samples = [
         "Hello😀😀 thanks for visiting! https://example.com <b>bold</b>\r\n\r\n\n\nextra text",
         "short",
