@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import io
 
-# Generate a bar chart comparing original vs summarized text length
+
 def plot_lengths(original_text: str, summary_text: str):
     """Return a bar chart image buffer comparing original and summary text lengths."""
 
@@ -12,30 +12,27 @@ def plot_lengths(original_text: str, summary_text: str):
     # Create bar chart
     fig, ax = plt.subplots(figsize=(4, 3))
     ax.bar(["Original", "Summary"], [original_len, summary_len])
-    ax.set_ylabel("Length (characters)")        # y-axis label
-    ax.set_title("Original vs Summary Length")  # chart title
+    ax.set_ylabel("Length (characters)")
+    ax.set_title("Original vs Summary Length")
 
     # Convert plot to image buffer for Streamlit display
     buf = io.BytesIO()
     plt.tight_layout()
     plt.savefig(buf, format="png")
     buf.seek(0)
-    plt.close(fig)  # Prevent memory leak
+    plt.close(fig)
 
     return buf
 
 
-# Calculate compression rate based on text length
 def calculate_compression(original_text: str, summary_text: str):
     """Return compression rate (%) calculated from original and summary lengths."""
 
     original_len = len(original_text)
     summary_len = len(summary_text)
 
-    # Avoid division when original text is empty
     if original_len == 0:
         return 0.0
 
-    # Compression formula: (1 - (summary / original)) * 100
     compression_rate = (1 - (summary_len / original_len)) * 100
     return round(compression_rate, 2)
