@@ -13,7 +13,7 @@ st.set_page_config(
 
 
 # Title & description
-st.title("📝 AI Text Summarizer")
+st.title("AI Text Summarizer")
 st.write(
     """
     Paste your text below and click **Summarize**.
@@ -70,7 +70,7 @@ if st.button("Summarize"):
                     st.error(f"Summarization failed: {e}")
                 else:
                     # 4) 결과 출력
-                    st.subheader("✅ Summary Result")
+                    st.subheader("Summary Result")
                     st.write(summary)
 
                     # 5) 간단한 로그/통계 정보
@@ -83,7 +83,7 @@ if st.button("Summarize"):
                     )
 
                     st.markdown("---")
-                    st.subheader("📊 Summary Statistics")
+                    st.subheader("Summary Statistics")
                     st.write(f"- Original length: **{original_len}** words")
                     st.write(f"- Summary length: **{summary_len}** words")
                     st.write(f"- Compression: **{compression}**")
