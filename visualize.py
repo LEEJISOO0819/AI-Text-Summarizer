@@ -26,4 +26,16 @@ def plot_lengths(original_text: str, summary_text: str):
 
 
 # Calculate compression rate based on text length
-def calc
+def calculate_compression(original_text: str, summary_text: str):
+    """Return compression rate (%) calculated from original and summary lengths."""
+
+    original_len = len(original_text)
+    summary_len = len(summary_text)
+
+    # Avoid division when original text is empty
+    if original_len == 0:
+        return 0.0
+
+    # Compression formula: (1 - (summary / original)) * 100
+    compression_rate = (1 - (summary_len / original_len)) * 100
+    return round(compression_rate, 2)
