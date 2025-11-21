@@ -109,6 +109,19 @@ class TextSummarizer:
         except Exception as e:
             return f"❌ Summarization error: {str(e)}"
 
+# --- Wrapper for Streamlit app (hosung) ---
+# Global instance for reuse
+_app_summarizer = TextSummarizer()
+
+def summarize_text(text: str, max_length: int = 120) -> str:
+    """
+    Simple wrapper used by app.py
+
+    This keeps the original TextSummarizer class
+    and just exposes a function interface.
+    """
+    return _app_summarizer.summarize(text, max_length=max_length)
+# --- end of wrapper ---
 
 if __name__ == "__main__":
     s = TextSummarizer()
