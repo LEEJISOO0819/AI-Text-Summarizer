@@ -4,3 +4,4 @@ streamlit
 sentencepiece
 protobuf
 regex
+matplotlib
