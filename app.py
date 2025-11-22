@@ -207,5 +207,5 @@ with st.expander("ℹ️ About this app"):
     - English: [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
     
     ### Credits:
-    Created by [Your Team Name]
+    Created by Jisoo Lee, Jisoo Kang, Hyunsoo Kim, Jiwoo Yang, Hosung Yoon
     """)
