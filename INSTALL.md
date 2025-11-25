@@ -39,8 +39,9 @@
      
 5. Execution Screen
 
-<img width="2043" height="1174" alt="스크린샷 2025-11-25 162950" src="https://github.com/user-attachments/assets/e3f1e3ed-43bf-4845-b0f5-ad37848f70fb" />
-<img width="2047" height="1120" alt="스크린샷 2025-11-25 163232" src="https://github.com/user-attachments/assets/ababe979-d15f-4101-b81f-35c6aada56a7" />
+<img width="2047" height="1165" alt="스크린샷 2025-11-25 164003" src="https://github.com/user-attachments/assets/ee6620a1-9d8a-4fe5-9a9f-58b0a75a1fb2" />
+<img width="2047" height="1170" alt="스크린샷 2025-11-25 164232" src="https://github.com/user-attachments/assets/46e8e534-aa24-4b68-9e11-96c8e9093cb1" />
+
 
 
 
