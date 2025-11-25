@@ -1,118 +1,239 @@
-# AI-Text-Summarizer
+# 🤖 AI Text Summarizer
 
-A simple AI-powered long-text summarizer with a Streamlit-based web UI.  
-This project provides text preprocessing, summarization using Hugging Face Transformers, and optional visualization features.
+An intelligent text summarization tool that automatically detects language (Korean/English) and generates concise summaries using state-of-the-art transformer models.
 
----
+## 📋 Table of Contents
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Models](#models)
+- [Technical Details](#technical-details)
+- [Contributors](#contributors)
+- [License](#license)
 
-## Demo
+## ✨ Features
 
-- **Web UI:** `app.py`  
-- **Preprocessing:** `preprocess.py`  
-- **Summarization Engine:** `summarizer.py`  
-- **Visualization:** `visualize.py`  
-- **Examples / Tests:** `examples/`, `tests/`
+- 🌐 **Bilingual Support**: Automatically detects and processes both Korean and English text
+- 🎯 **Flexible Summary Length**: Choose between Short, Medium, or Long summaries
+- 📊 **Visual Analytics**: Interactive charts showing compression statistics
+- 🖥️ **User-Friendly Interface**: Built with Streamlit for easy interaction
+- 🚀 **State-of-the-Art Models**: Uses KoBART for Korean and BART-CNN for English
 
----
+## 🎬 Demo
 
-## Features
+### Input Example
+```
+Original text (500+ characters)...
+```
 
-- Clean text (remove emojis, URLs, HTML tags, excessive whitespace)
-- Summarize long English or Korean text using Transformers
-- Adjustable summary length (Short / Medium / Long)
-- Visualization: original vs summary text length chart
-- Preprocessing unit tests included
+### Output
+- Concise summary (50-150 characters based on settings)
+- Visual comparison charts
+- Detailed statistics (compression rate, word count, etc.)
 
----
+## 🛠️ Installation
 
-## Quick Start (Local Installation)
+### Prerequisites
+- Python 3.10 or higher
+- pip package manager
 
-### **Requirements**
-- Python 3.10+
-- Git
-- Streamlit
-- Hugging Face Transformers
-- (Optional) GPU for faster inference
-
----
-
-## 1. Clone Repository
-
+### Step 1: Clone the Repository
+```bash
 git clone https://github.com/LEEJISOO0819/AI-Text-Summarizer.git
 cd AI-Text-Summarizer
+```
 
-## 2. Create & Activate Virtual Environment
-Windows (Git Bash)
-bash
-python -m venv venv
-source venv/Scripts/activate
-
-macOS / Linux
-bash
-python3 -m venv venv
-source venv/bin/activate
-
-## 3. Install Dependencies
-bash
-pip install --upgrade pip
+### Step 2: Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-⚠️ If PyTorch installation fails on Windows, install a compatible version from:
-https://pytorch.org/get-started/locally/
-
-## 4. Run Streamlit Web UI
-bash
+### Step 3: Run the Application
+```bash
 streamlit run app.py
+```
 
-Open your browser at:
-http://localhost:8501
+The application will open in your default browser at `http://localhost:8501`
 
-🖥️ Usage Instructions
-1. Paste long text into Input Text.
-2. Choose summary length:
-- Short
-- Medium
-- Long
-3. Click Summarize.
-4. (Optional) Enable Show visualization to see a chart comparing lengths.
+## 📦 Requirements
 
-## Running Tests (optional)
-bash
-pip install pytest
-pytest -q tests/preprocess_test.py
+```txt
+transformers==4.35.0
+torch==2.1.0
+streamlit==1.28.0
+sentencepiece==0.1.99
+protobuf==3.20.3
+regex==2023.10.3
+matplotlib==3.8.0
+```
 
-## Project Structure
-bash
+## 🚀 Usage
+
+### Basic Usage
+
+1. **Launch the app**
+   ```bash
+   streamlit run app.py
+   ```
+
+2. **Input your text**
+   - Type or paste text into the input area (minimum 50 characters)
+   - Or select from example texts in the sidebar
+
+3. **Choose summary length**
+   - Short: ~60 tokens
+   - Medium: ~100 tokens
+   - Long: ~150 tokens
+
+4. **Click "Summarize"**
+   - Wait for processing (first run may take 1-2 minutes to download models)
+   - View results with visual comparisons
+
+### Example Code Usage
+
+```python
+from summarizer import summarize_text
+from preprocess import clean_text
+
+# Prepare text
+text = "Your long text here..."
+cleaned_text, error = clean_text(text, min_length=50)
+
+if not error:
+    # Generate summary
+    summary = summarize_text(cleaned_text, max_length=100)
+    print(summary)
+```
+
+## 📁 Project Structure
+
+```
 AI-Text-Summarizer/
-├── app.py               # Streamlit web UI
-├── preprocess.py        # Cleaning functions
-├── summarizer.py        # Hugging Face model summarizer
-├── visualize.py         # Visualization module
-├── requirements.txt
-├── README.md
-├── INSTALL.md
-├── examples/
-│   └── sample_input.txt
-└── tests/
-    └── preprocess_test.py
+│
+├── app.py                  # Main Streamlit application
+├── summarizer.py           # AI summarization logic (KoBART + BART-CNN)
+├── preprocess.py           # Text preprocessing and cleaning
+├── visualize.py            # Visualization functions (charts, statistics)
+├── requirements.txt        # Python dependencies
+└── README.md              # Project documentation
+```
 
-## Contributing
-1. Create a new branch:
-bash
-git checkout -b feature/your-feature
+### File Descriptions
 
-2. Commit changes with clear English messages.
-3. Push the branch and open a Pull Request to main.
+- **app.py**: Streamlit web interface with user interaction logic
+- **summarizer.py**: Core summarization engine with automatic language detection
+- **preprocess.py**: Text cleaning (removes URLs, emojis, HTML tags, etc.)
+- **visualize.py**: Generates comparison charts and calculates statistics
 
-## Notes
-- First-time model loading may take a few minutes.
-- If summarization feels slow, consider switching to a lighter model.
-- Some warnings from Hugging Face are normal and safe to ignore.
+## 🤖 Models
 
-## License
-MIT License
-Feel free to use, modify, and distribute.
+### Korean Summarization
+- **Model**: [gogamza/kobart-summarization](https://huggingface.co/gogamza/kobart-summarization)
+- **Architecture**: KoBART (Korean BART)
+- **Max Input**: 3000 characters
+- **Use Case**: Optimized for Korean text summarization
 
-## Contact
-Maintainer: Lee Jisoo
-Email: dearjis00@naver.com
+### English Summarization
+- **Model**: [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
+- **Architecture**: BART-Large fine-tuned on CNN/DailyMail
+- **Max Input**: 1024 characters
+- **Use Case**: News article and general English text summarization
+
+### Language Detection
+The system automatically detects the primary language by counting Korean characters (가-힣) vs. English characters (a-zA-Z) and selects the appropriate model.
+
+## 🔧 Technical Details
+
+### Text Preprocessing
+- Unicode normalization (NFKC)
+- URL removal
+- HTML tag stripping
+- Emoji filtering
+- Control character removal
+- Whitespace normalization
+
+### Summarization Process
+1. **Input Validation**: Check minimum length (50 characters)
+2. **Preprocessing**: Clean and normalize text
+3. **Language Detection**: Identify Korean vs. English
+4. **Model Selection**: Choose appropriate summarization model
+5. **Summary Generation**: Generate summary with specified length
+6. **Visualization**: Display results with statistics
+
+### Visualization Features
+- **Bar Chart**: Original vs. Summary length comparison
+- **Pie Chart**: Content distribution (kept vs. removed)
+- **Statistics Panel**: Detailed metrics including:
+  - Character count
+  - Word count
+  - Sentence count
+  - Compression rate
+
+## ⚙️ Configuration
+
+### Adjusting Summary Length
+Edit `app.py` to customize summary lengths:
+
+```python
+def get_max_length(option: str) -> int:
+    if option == "Short":
+        return 60  # Adjust here
+    elif option == "Medium":
+        return 100  # Adjust here
+    else:
+        return 150  # Adjust here
+```
+
+### Changing Minimum Input Length
+Edit `preprocess.py`:
+
+```python
+def clean_text(text: str, min_length: int = 50):  # Change default here
+    # ...
+```
+
+## 🐛 Troubleshooting
+
+### Issue: "Model not loading"
+**Solution**: Ensure you have a stable internet connection for the first run to download models (~2GB total).
+
+### Issue: "Text too short" error
+**Solution**: Input text must be at least 50 characters (adjustable in `preprocess.py`).
+
+### Issue: "Out of memory" error
+**Solution**: If you don't have GPU, the system will automatically use CPU. For very long texts, they will be truncated automatically.
+
+### Issue: Charts not displaying
+**Solution**: Make sure matplotlib is installed:
+```bash
+pip install matplotlib
+```
+
+## 👥 Contributors
+
+- **Team Leader**: Jisoo LEE - Core development, model integration
+- **Team Member 1**: Jiwoo Yang - Preprocessing module
+- **Team Member 2**: Hosung Yoon - UI/UX design
+- **Team Member 3**: Jisoo Kang - Visualization module
+- **Team Member 4**: Hyunsoo Kim - Testing & documentation
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- [HuggingFace Transformers](https://huggingface.co/transformers/) for the model framework
+- [Streamlit](https://streamlit.io/) for the web interface
+- [gogamza](https://huggingface.co/gogamza) for the KoBART model
+- [Facebook AI](https://huggingface.co/facebook) for the BART-CNN model
+
+## 📞 Contact
+
+For questions or feedback, please open an issue on GitHub or contact [dearjis00@naver.com]
+
+---
+
+**⭐ If you find this project useful, please consider giving it a star!**
