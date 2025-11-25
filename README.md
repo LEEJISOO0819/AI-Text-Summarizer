@@ -213,7 +213,7 @@ pip install matplotlib
 
 ## 👥 Contributors
 
-- **Team Leader**: Jisoo LEE - Core development, model integration
+- **Team Leader**: Jisoo Lee - Core development, model integration
 - **Team Member 1**: Jiwoo Yang - Preprocessing module
 - **Team Member 2**: Hosung Yoon - UI/UX design
 - **Team Member 3**: Jisoo Kang - Visualization module
