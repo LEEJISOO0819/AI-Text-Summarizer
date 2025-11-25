@@ -5,7 +5,7 @@ This project provides text preprocessing, summarization using Hugging Face Trans
 
 ---
 
-## 🚀 Demo
+## Demo
 
 - **Web UI:** `app.py`  
 - **Preprocessing:** `preprocess.py`  
@@ -15,7 +15,7 @@ This project provides text preprocessing, summarization using Hugging Face Trans
 
 ---
 
-## ✨ Features
+## Features
 
 - Clean text (remove emojis, URLs, HTML tags, excessive whitespace)
 - Summarize long English or Korean text using Transformers
@@ -25,7 +25,7 @@ This project provides text preprocessing, summarization using Hugging Face Trans
 
 ---
 
-## 📦 Quick Start (Local Installation)
+## Quick Start (Local Installation)
 
 ### **Requirements**
 - Python 3.10+
@@ -38,60 +38,51 @@ This project provides text preprocessing, summarization using Hugging Face Trans
 
 ## 1. Clone Repository
 
-```bash
 git clone https://github.com/LEEJISOO0819/AI-Text-Summarizer.git
 cd AI-Text-Summarizer
-2. Create & Activate Virtual Environment
+
+## 2. Create & Activate Virtual Environment
 Windows (Git Bash)
 bash
-코드 복사
 python -m venv venv
 source venv/Scripts/activate
+
 macOS / Linux
 bash
-코드 복사
 python3 -m venv venv
 source venv/bin/activate
-3. Install Dependencies
+
+## 3. Install Dependencies
 bash
-코드 복사
 pip install --upgrade pip
 pip install -r requirements.txt
+
 ⚠️ If PyTorch installation fails on Windows, install a compatible version from:
 https://pytorch.org/get-started/locally/
 
-4. Run Streamlit Web UI
+## 4. Run Streamlit Web UI
 bash
-코드 복사
 streamlit run app.py
+
 Open your browser at:
-
-arduino
-코드 복사
 http://localhost:8501
+
 🖥️ Usage Instructions
-Paste long text into Input Text.
+1. Paste long text into Input Text.
+2. Choose summary length:
+- Short
+- Medium
+- Long
+3. Click Summarize.
+4. (Optional) Enable Show visualization to see a chart comparing lengths.
 
-Choose summary length:
-
-Short
-
-Medium
-
-Long
-
-Click Summarize.
-
-(Optional) Enable Show visualization to see a chart comparing lengths.
-
-🧪 Running Tests (optional)
+## Running Tests (optional)
 bash
-코드 복사
 pip install pytest
 pytest -q tests/preprocess_test.py
-📁 Project Structure
+
+## Project Structure
 bash
-코드 복사
 AI-Text-Summarizer/
 ├── app.py               # Streamlit web UI
 ├── preprocess.py        # Cleaning functions
@@ -104,27 +95,24 @@ AI-Text-Summarizer/
 │   └── sample_input.txt
 └── tests/
     └── preprocess_test.py
-🤝 Contributing
-Create a new branch:
 
+## Contributing
+1. Create a new branch:
 bash
-코드 복사
 git checkout -b feature/your-feature
-Commit changes with clear English messages.
 
-Push the branch and open a Pull Request to main.
+2. Commit changes with clear English messages.
+3. Push the branch and open a Pull Request to main.
 
-⚠️ Notes
-First-time model loading may take a few minutes.
+## Notes
+- First-time model loading may take a few minutes.
+- If summarization feels slow, consider switching to a lighter model.
+- Some warnings from Hugging Face are normal and safe to ignore.
 
-If summarization feels slow, consider switching to a lighter model.
-
-Some warnings from Hugging Face are normal and safe to ignore.
-
-📄 License
+## License
 MIT License
 Feel free to use, modify, and distribute.
 
-📬 Contact
+## Contact
 Maintainer: Lee Jisoo
 Email: dearjis00@naver.com
