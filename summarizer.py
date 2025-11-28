@@ -60,7 +60,7 @@ class TextSummarizer:
 
         Args:
             text (str): Text to summarize
-            max_length (int): Maximum length of summary
+            max_length (int): Maximum length of summary (in tokens)
 
         Returns:
             str: Summary text or error message
@@ -88,18 +88,29 @@ class TextSummarizer:
             print(f"⚠️ Text truncated to {max_input_length} characters")
         
         try:
-            # 영어 모델은 더 긴 요약 가능
+            # ===== 수정: 고정된 길이 사용 =====
+            # max_length를 그대로 사용하되, 언어별로 min_length만 조정
+            
             if language == 'en':
-                adjusted_max_length = min(max_length, int(text_length * 0.5))
-                adjusted_min_length = max(30, int(adjusted_max_length * 0.3))
+                # 영어: max_length 그대로 사용
+                final_max_length = max_length
+                final_min_length = max(20, int(max_length * 0.4))
             else:
-                adjusted_max_length = min(max_length, int(text_length * 0.6))
-                adjusted_min_length = max(20, int(adjusted_max_length * 0.3))
+                # 한국어: max_length 그대로 사용
+                final_max_length = max_length
+                final_min_length = max(15, int(max_length * 0.3))
+            
+            # 입력이 너무 짧으면 max_length를 조정
+            estimated_tokens = text_length // 4  # 대략적인 토큰 수 추정
+            if estimated_tokens < final_max_length:
+                final_max_length = max(final_min_length + 5, int(estimated_tokens * 0.7))
+            
+            print(f"Summary config: max_length={final_max_length}, min_length={final_min_length}")
             
             result = summarizer(
                 text,
-                max_length=adjusted_max_length,
-                min_length=adjusted_min_length,
+                max_length=final_max_length,
+                min_length=final_min_length,
                 do_sample=False,
                 truncation=True
             )
@@ -151,18 +162,39 @@ if __name__ == "__main__":
     """
     
     print("=" * 70)
-    print("🇺🇸 ENGLISH TEST")
+    print("🇺🇸 ENGLISH TEST - Testing Different Lengths")
     print("=" * 70)
     print("📝 Original:")
     print(english_text.strip())
-    print("\n📌 Summary:")
-    print(s.summarize(english_text, max_length=80))
+    
+    print("\n" + "─" * 70)
+    print("📌 Short Summary (max_length=60):")
+    print(s.summarize(english_text, max_length=60))
+    
+    print("\n" + "─" * 70)
+    print("📌 Medium Summary (max_length=100):")
+    print(s.summarize(english_text, max_length=100))
+    
+    print("\n" + "─" * 70)
+    print("📌 Long Summary (max_length=150):")
+    print(s.summarize(english_text, max_length=150))
     
     print("\n" + "=" * 70)
-    print("🇰🇷 KOREAN TEST")
+    print("🇰🇷 KOREAN TEST - Testing Different Lengths")
     print("=" * 70)
     print("📝 Original:")
     print(korean_text.strip())
-    print("\n📌 Summary:")
+    
+    print("\n" + "─" * 70)
+    print("📌 Short Summary (max_length=60):")
     print(s.summarize(korean_text, max_length=60))
+    
+    print("\n" + "─" * 70)
+    print("📌 Medium Summary (max_length=100):")
+    print(s.summarize(korean_text, max_length=100))
+    
+    print("\n" + "─" * 70)
+    print("📌 Long Summary (max_length=150):")
+    print(s.summarize(korean_text, max_length=150))
+    
     print("=" * 70)
