@@ -54,13 +54,15 @@ class TextSummarizer:
         else:
             return 'en'
 
-    def summarize(self, text, max_length=120):
+    def summarize(self, text, max_length=120, target_chars=None):
         """
         Summarize text in Korean or English (auto-detected).
 
         Args:
             text (str): Text to summarize
             max_length (int): Maximum length of summary (in tokens)
+            target_chars (int, optional): Target character count. If provided, 
+                                         will adjust to meet this target.
 
         Returns:
             str: Summary text or error message
@@ -88,22 +90,24 @@ class TextSummarizer:
             print(f"⚠️ Text truncated to {max_input_length} characters")
         
         try:
-            # ===== 완전히 수정된 길이 설정 =====
+            # 문자 수 목표가 있는 경우 반복적으로 조정
+            if target_chars is not None:
+                return self._summarize_with_target_chars(
+                    summarizer, text, language, target_chars
+                )
             
-            # max_length를 사용자가 선택한 값 그대로 사용
+            # 기존 로직 (토큰 기반)
             final_max_length = max_length
             
             # 언어별 min_length 비율 설정
             if language == 'en':
-                # 영어: min은 max의 40%
                 final_min_length = max(25, int(max_length * 0.4))
             else:
-                # 한국어: min은 max의 35%
                 final_min_length = max(20, int(max_length * 0.35))
             
             # 입력이 매우 짧을 때만 max_length를 줄임
             estimated_tokens = text_length // 4
-            if estimated_tokens < 80:  # 입력이 매우 짧은 경우만
+            if estimated_tokens < 80:
                 final_max_length = max(40, int(estimated_tokens * 0.7))
                 final_min_length = max(20, int(final_max_length * 0.4))
             
@@ -124,19 +128,103 @@ class TextSummarizer:
         
         except Exception as e:
             return f"❌ Summarization error: {str(e)}"
+    
+    def _summarize_with_target_chars(self, summarizer, text, language, target_chars):
+        """
+        Generate summary targeting a specific character count.
+        Uses iterative adjustment to get close to the target.
+        
+        Args:
+            summarizer: The summarization pipeline
+            text: Input text
+            language: 'ko' or 'en'
+            target_chars: Target character count
+            
+        Returns:
+            str: Summary text
+        """
+        # 초기 토큰 수 추정 (대략적으로 문자 수의 1/2 ~ 1/3)
+        # 한국어는 토큰당 더 많은 문자를 포함하는 경향
+        if language == 'ko':
+            initial_max_tokens = int(target_chars * 0.6)
+        else:
+            initial_max_tokens = int(target_chars * 0.5)
+        
+        # 최소/최대 토큰 수 제한
+        initial_max_tokens = max(20, min(initial_max_tokens, 512))
+        initial_min_tokens = max(10, int(initial_max_tokens * 0.3))
+        
+        best_summary = None
+        best_diff = float('inf')
+        attempts = 0
+        max_attempts = 5
+        
+        current_max = initial_max_tokens
+        current_min = initial_min_tokens
+        
+        while attempts < max_attempts:
+            try:
+                result = summarizer(
+                    text,
+                    max_length=current_max,
+                    min_length=current_min,
+                    do_sample=False,
+                    truncation=True
+                )
+                
+                summary_text = result[0]['summary_text']
+                summary_chars = len(summary_text)
+                diff = abs(summary_chars - target_chars)
+                
+                # 더 가까운 결과를 저장
+                if diff < best_diff:
+                    best_diff = diff
+                    best_summary = summary_text
+                
+                # 목표 범위에 도달했으면 종료
+                if summary_chars <= target_chars * 1.1:  # 목표의 110% 이하면 충분히 가까움
+                    print(f"Generated summary: {summary_chars} characters (target: {target_chars})")
+                    return summary_text
+                
+                # 조정: 결과가 목표보다 크면 토큰 수를 줄임
+                if summary_chars > target_chars:
+                    current_max = max(current_min + 5, int(current_max * 0.85))
+                    current_min = max(10, int(current_max * 0.3))
+                else:
+                    # 결과가 목표보다 작으면 토큰 수를 늘림
+                    current_max = min(512, int(current_max * 1.15))
+                    current_min = max(10, int(current_max * 0.3))
+                
+                attempts += 1
+                
+            except Exception as e:
+                print(f"Attempt {attempts + 1} failed: {e}")
+                break
+        
+        # 최선의 결과 반환
+        if best_summary:
+            print(f"Generated summary: {len(best_summary)} characters (target: {target_chars}, best match)")
+            return best_summary
+        else:
+            return "❌ Failed to generate summary with target character count."
 
 # --- Wrapper for Streamlit app (hosung) ---
 # Global instance for reuse
 _app_summarizer = TextSummarizer()
 
-def summarize_text(text: str, max_length: int = 120) -> str:
+def summarize_text(text: str, max_length: int = 120, target_chars: int = None) -> str:
     """
     Simple wrapper used by app.py
 
     This keeps the original TextSummarizer class
     and just exposes a function interface.
+    
+    Args:
+        text: Text to summarize
+        max_length: Maximum tokens (used if target_chars is None)
+        target_chars: Target character count (overrides max_length if provided)
     """
-    return _app_summarizer.summarize(text, max_length=max_length)
+    return _app_summarizer.summarize(text, max_length=max_length, target_chars=target_chars)
 # --- end of wrapper ---
 
 if __name__ == "__main__":

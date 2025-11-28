@@ -56,18 +56,24 @@ summary_length = st.selectbox(
     "Select Summary Length",
     ["Short", "Medium", "Long"],
     index=1,
-    help="Short: ~60 tokens, Medium: ~100 tokens, Long: ~150 tokens"
+    help="Short: under 100 characters, Medium: under 200 characters, Long: over 300 characters"
 )
 
 
-# Helper: map length option -> max_length
-def get_max_length(option: str) -> int:
+# Helper: map length option -> target character count
+def get_target_chars(option: str) -> int:
+    """
+    Returns target character count for each summary length option.
+    - Short: under 100 characters
+    - Medium: under 200 characters
+    - Long: over 300 characters
+    """
     if option == "Short":
-        return 40
+        return 80  # Target for under 100 chars
     elif option == "Medium":
-        return 100
-    else:
-        return 200
+        return 150  # Target for under 200 chars
+    else:  # Long
+        return 350  # Target for over 300 chars
 
 
 # Main button: Summarize
@@ -85,11 +91,11 @@ if st.button("🚀 Summarize", type="primary"):
             st.error(f"❌ Preprocessing failed: {error}")
         else:
             # 3) Summarization step
-            max_len = get_max_length(summary_length)
+            target_chars = get_target_chars(summary_length)
 
             with st.spinner("✨ Generating summary... (First run may take 1-2 minutes)"):
                 try:
-                    summary = summarize_text(cleaned_text, max_length=max_len)
+                    summary = summarize_text(cleaned_text, target_chars=target_chars)
                 except Exception as e:
                     st.error(f"❌ Summarization failed: {e}")
                 else:
