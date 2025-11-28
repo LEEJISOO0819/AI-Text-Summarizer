@@ -2,7 +2,7 @@
 
 import streamlit as st
 from preprocess import clean_text
-from summarizer import summarize_text
+from summarizer import summarize_text, summarize_text_two_stage
 from visualize import plot_lengths, plot_pie_chart, calculate_compression, create_stats_dict
 
 
@@ -87,7 +87,9 @@ if st.button("🚀 Summarize", type="primary"):
             # 3) Summarization step
             max_len = get_max_length(summary_length)
 
+            mode = summary_length.lower()  # "short"/"medium"/"long"
             with st.spinner("✨ Generating summary... (First run may take 1-2 minutes)"):
+                summary = summarize_text_two_stage(cleaned_text, mode=mode)
                 try:
                     summary = summarize_text(cleaned_text, max_length=max_len)
                 except Exception as e:
