@@ -88,24 +88,26 @@ class TextSummarizer:
             print(f"⚠️ Text truncated to {max_input_length} characters")
         
         try:
-            # ===== 수정: 고정된 길이 사용 =====
-            # max_length를 그대로 사용하되, 언어별로 min_length만 조정
+            # ===== 완전히 수정된 길이 설정 =====
             
+            # max_length를 사용자가 선택한 값 그대로 사용
+            final_max_length = max_length
+            
+            # 언어별 min_length 비율 설정
             if language == 'en':
-                # 영어: max_length 그대로 사용
-                final_max_length = max_length
-                final_min_length = max(20, int(max_length * 0.4))
+                # 영어: min은 max의 40%
+                final_min_length = max(25, int(max_length * 0.4))
             else:
-                # 한국어: max_length 그대로 사용
-                final_max_length = max_length
-                final_min_length = max(15, int(max_length * 0.3))
+                # 한국어: min은 max의 35%
+                final_min_length = max(20, int(max_length * 0.35))
             
-            # 입력이 너무 짧으면 max_length를 조정
-            estimated_tokens = text_length // 4  # 대략적인 토큰 수 추정
-            if estimated_tokens < final_max_length:
-                final_max_length = max(final_min_length + 5, int(estimated_tokens * 0.7))
+            # 입력이 매우 짧을 때만 max_length를 줄임
+            estimated_tokens = text_length // 4
+            if estimated_tokens < 80:  # 입력이 매우 짧은 경우만
+                final_max_length = max(40, int(estimated_tokens * 0.7))
+                final_min_length = max(20, int(final_max_length * 0.4))
             
-            print(f"Summary config: max_length={final_max_length}, min_length={final_min_length}")
+            print(f"Summary settings: max={final_max_length}, min={final_min_length}")
             
             result = summarizer(
                 text,
@@ -115,7 +117,10 @@ class TextSummarizer:
                 truncation=True
             )
             
-            return result[0]['summary_text']
+            summary_text = result[0]['summary_text']
+            print(f"Generated summary: {len(summary_text)} characters")
+            
+            return summary_text
         
         except Exception as e:
             return f"❌ Summarization error: {str(e)}"
@@ -137,7 +142,7 @@ def summarize_text(text: str, max_length: int = 120) -> str:
 if __name__ == "__main__":
     s = TextSummarizer()
     
-    # 영어 예제
+    # 영어 예제 (1605자 정도)
     english_text = """
     Artificial intelligence is rapidly transforming our world in unprecedented ways. 
     From healthcare to finance, education to entertainment, AI technologies are 
@@ -146,9 +151,26 @@ if __name__ == "__main__":
     In finance, AI-powered trading systems process vast amounts of data in 
     milliseconds to make investment decisions. Self-driving cars are becoming 
     a reality, promising to reduce accidents and transform transportation. 
-    However, these advances also raise important ethical questions about privacy, 
-    job displacement, and algorithmic bias. As AI continues to evolve, society 
-    must grapple with how to harness its benefits while mitigating potential risks.
+    Natural language processing has advanced to the point where chatbots can 
+    engage in surprisingly human-like conversations. Computer vision systems can 
+    now identify objects and faces with incredible precision. In education, 
+    personalized learning platforms adapt to individual student needs and pace.
+    Climate science benefits from AI's ability to analyze massive datasets and 
+    predict weather patterns. Manufacturing has been transformed by robotics and 
+    predictive maintenance systems that prevent equipment failures before they occur.
+    Agriculture uses AI for precision farming, optimizing crop yields while 
+    minimizing resource use. Entertainment industries leverage AI for content 
+    recommendation, video game development, and even creative tasks like music 
+    composition. However, these advances also raise important ethical questions 
+    about privacy, job displacement, algorithmic bias, and the concentration of 
+    power in tech companies. There are concerns about AI systems making decisions 
+    that affect people's lives without adequate transparency or accountability.
+    As AI continues to evolve at a rapid pace, society must grapple with how to 
+    harness its benefits while mitigating potential risks and ensuring equitable 
+    access to these transformative technologies. Governments are beginning to 
+    develop regulatory frameworks, though they struggle to keep pace with 
+    technological advancement. International cooperation is essential as AI 
+    development transcends national boundaries and its impacts are global in scope.
     """
     
     # 한국어 예제
@@ -159,42 +181,34 @@ if __name__ == "__main__":
     가능하게 하고 있습니다. 하지만 인공지능의 윤리적 문제와 일자리 감소에 
     대한 우려도 함께 제기되고 있습니다. 앞으로 인공지능 기술의 발전과 함께 
     이러한 문제들을 해결하기 위한 사회적 논의가 필요합니다.
+    제조업에서는 로봇과 예측 유지보수 시스템이 생산성을 크게 향상시키고 있으며,
+    농업에서는 정밀 농업을 통해 자원 사용을 최소화하면서 수확량을 최적화하고 있습니다.
     """
     
-    print("=" * 70)
-    print("🇺🇸 ENGLISH TEST - Testing Different Lengths")
-    print("=" * 70)
-    print("📝 Original:")
-    print(english_text.strip())
+    print("=" * 80)
+    print("🇺🇸 ENGLISH TEST - Different Length Comparison")
+    print("=" * 80)
+    print(f"📝 Original: {len(english_text)} characters\n")
     
-    print("\n" + "─" * 70)
-    print("📌 Short Summary (max_length=60):")
-    print(s.summarize(english_text, max_length=60))
+    for length_name, max_len in [("Short", 60), ("Medium", 100), ("Long", 150)]:
+        print("─" * 80)
+        print(f"📌 {length_name} Summary (max_length={max_len}):")
+        summary = s.summarize(english_text, max_length=max_len)
+        print(f"Result: {summary}")
+        print(f"Length: {len(summary)} characters")
+        print()
     
-    print("\n" + "─" * 70)
-    print("📌 Medium Summary (max_length=100):")
-    print(s.summarize(english_text, max_length=100))
+    print("\n" + "=" * 80)
+    print("🇰🇷 KOREAN TEST - Different Length Comparison")
+    print("=" * 80)
+    print(f"📝 Original: {len(korean_text)} characters\n")
     
-    print("\n" + "─" * 70)
-    print("📌 Long Summary (max_length=150):")
-    print(s.summarize(english_text, max_length=150))
+    for length_name, max_len in [("Short", 60), ("Medium", 100), ("Long", 150)]:
+        print("─" * 80)
+        print(f"📌 {length_name} Summary (max_length={max_len}):")
+        summary = s.summarize(korean_text, max_length=max_len)
+        print(f"Result: {summary}")
+        print(f"Length: {len(summary)} characters")
+        print()
     
-    print("\n" + "=" * 70)
-    print("🇰🇷 KOREAN TEST - Testing Different Lengths")
-    print("=" * 70)
-    print("📝 Original:")
-    print(korean_text.strip())
-    
-    print("\n" + "─" * 70)
-    print("📌 Short Summary (max_length=60):")
-    print(s.summarize(korean_text, max_length=60))
-    
-    print("\n" + "─" * 70)
-    print("📌 Medium Summary (max_length=100):")
-    print(s.summarize(korean_text, max_length=100))
-    
-    print("\n" + "─" * 70)
-    print("📌 Long Summary (max_length=150):")
-    print(s.summarize(korean_text, max_length=150))
-    
-    print("=" * 70)
+    print("=" * 80)
