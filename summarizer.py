@@ -103,19 +103,20 @@ class TextSummarizer:
                     max_tokens = 100
                     min_tokens = 50
             else:
-                # 한국어: 1 토큰 ≈ 2-3 문자
-                # KoBART는 매우 길게 생성하는 경향 - 극단적으로 줄여야 함
+                # 한국어: KoBART는 1토큰당 10-14자를 생성
+                # 극단적으로 낮은 값 사용 필요
                 if target_chars <= 100:  # Short (~80 chars)
-                    max_tokens = 18  # 극단적으로 줄임!
-                    min_tokens = 10
+                    max_tokens = 12  # 매우 짧게!
+                    min_tokens = 6
                 elif target_chars <= 200:  # Medium (~150 chars)
-                    max_tokens = 35  # 더 줄임!
-                    min_tokens = 20
+                    max_tokens = 25
+                    min_tokens = 15
                 else:  # Long (~350 chars)
-                    max_tokens = 100
-                    min_tokens = 60
+                    max_tokens = 80
+                    min_tokens = 50
             
             print(f"Target: {target_chars} chars → Tokens: max={max_tokens}, min={min_tokens}")
+            print(f"Language: {language}")
             
             # 요약 생성
             result = summarizer(
