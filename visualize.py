@@ -167,7 +167,36 @@ def plot_pie_chart(original_text: str, summary_text: str):
         io.BytesIO: Image buffer for Streamlit display
     """
     summary_len = len(summary_text)
-    removed_len = len(original_text) - summary_len
+    original_len = len(original_text)
+    
+    # Handle case where summary is longer than original
+    if summary_len >= original_len:
+        # Show only summary length with a note
+        fig, ax = plt.subplots(figsize=(5, 5))
+        
+        ax.text(0.5, 0.5, 
+                f'Summary is longer\nthan original\n\n'
+                f'Original: {original_len} chars\n'
+                f'Summary: {summary_len} chars',
+                ha='center', va='center',
+                fontsize=12, fontweight='bold',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.axis('off')
+        ax.set_title("Content Distribution", fontsize=14, fontweight='bold', pad=15)
+        
+        plt.tight_layout()
+        
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png", dpi=100, bbox_inches='tight')
+        buf.seek(0)
+        plt.close(fig)
+        
+        return buf
+    
+    # Normal case: summary is shorter
+    removed_len = original_len - summary_len
     
     # Create pie chart
     fig, ax = plt.subplots(figsize=(5, 5))
