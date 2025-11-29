@@ -18,9 +18,8 @@ st.set_page_config(
 st.title("🤖 AI Text Summarizer")
 st.write(
     """
-    Paste your text below and click **Summarize**.
+    Paste your **English text** below and click **Summarize**.
     Make sure your input is at least **50 characters** long.
-    Supports both **Korean** 🇰🇷 and **English** 🇺🇸 (auto-detected).
     """
 )
 
@@ -29,8 +28,9 @@ st.write(
 st.sidebar.header("📚 Example Texts")
 examples = {
     "Custom Input": "",
-    "🇰🇷 Korean - Breakup": """오늘 3년 사귄 애인이랑 헤어졌어... 너무 힘들다. 아침에 카톡으로 만나자고 해서 나갔더니 갑자기 헤어지자는 거야. 이유를 물어봤더니 자기가 요즘 너무 힘들어서 연애할 여유가 없다는 거야. 나는 이해가 안 가더라. 우리 사이 좋았잖아. 지난주에도 같이 영화 보고 밥 먹고 그랬는데. 갑자기 왜 이러는 건지 모르겠어.""",
-    "🇺🇸 English - AI Tech": """Artificial intelligence is rapidly transforming our world in unprecedented ways. From healthcare to finance, education to entertainment, AI technologies are revolutionizing how we live and work. Machine learning algorithms can now diagnose diseases with remarkable accuracy, often surpassing human doctors. In finance, AI-powered trading systems process vast amounts of data in milliseconds to make investment decisions."""
+    "🔬 AI Technology": """Artificial intelligence is rapidly transforming our world in unprecedented ways. From healthcare to finance, education to entertainment, AI technologies are revolutionizing how we live and work. Machine learning algorithms can now diagnose diseases with remarkable accuracy, often surpassing human doctors. In finance, AI-powered trading systems process vast amounts of data in milliseconds to make investment decisions.""",
+    "🌍 Climate Change": """Climate change represents one of the most pressing challenges facing humanity today. Rising global temperatures are causing ice caps to melt, sea levels to rise, and weather patterns to become increasingly unpredictable. Extreme weather events such as hurricanes, droughts, and wildfires are becoming more frequent and severe. Scientists warn that without immediate action to reduce greenhouse gas emissions, we risk triggering irreversible tipping points in Earth's climate system.""",
+    "💼 Remote Work": """The COVID-19 pandemic has fundamentally transformed how we work, accelerating the shift toward remote and hybrid work arrangements. Many companies have discovered that employees can be just as productive, if not more so, when working from home. This has led to a reevaluation of traditional office spaces and work culture. However, remote work also presents challenges, including maintaining team cohesion, preventing burnout, and ensuring equitable access to opportunities."""
 }
 
 selected_example = st.sidebar.selectbox("Choose an example", list(examples.keys()))
@@ -39,13 +39,13 @@ selected_example = st.sidebar.selectbox("Choose an example", list(examples.keys(
 # User input
 if selected_example == "Custom Input":
     user_input = st.text_area(
-        "Input Text",
+        "Input Text (English)",
         height=250,
-        placeholder="Enter a long text to summarize..."
+        placeholder="Enter a long English text to summarize..."
     )
 else:
     user_input = st.text_area(
-        "Input Text",
+        "Input Text (English)",
         value=examples[selected_example],
         height=250
     )
@@ -56,7 +56,7 @@ summary_length = st.selectbox(
     "Select Summary Length",
     ["Short", "Medium", "Long"],
     index=1,
-    help="Short: under 100 characters, Medium: under 200 characters, Long: over 300 characters"
+    help="Short: ~100 characters, Medium: ~150-200 characters, Long: ~300-400 characters"
 )
 
 
@@ -64,16 +64,13 @@ summary_length = st.selectbox(
 def get_target_chars(option: str) -> int:
     """
     Returns target character count for each summary length option.
-    - Short: under 100 characters
-    - Medium: under 200 characters
-    - Long: over 300 characters
     """
     if option == "Short":
-        return 80  # Target for under 100 chars
+        return 80
     elif option == "Medium":
-        return 150  # Target for under 200 chars
+        return 150
     else:  # Long
-        return 350  # Target for over 300 chars
+        return 350
 
 
 # Main button: Summarize
@@ -135,29 +132,26 @@ if st.button("🚀 Summarize", type="primary"):
                         st.markdown("---")
                         st.subheader("📊 Comparison & Statistics")
                         
-                        # Create THREE columns for viz (막대 + 파이 + 통계)
+                        # Create THREE columns for viz
                         viz_col1, viz_col2, viz_col3 = st.columns([1, 1, 1])
                         
                         with viz_col1:
-                            # Display bar chart
                             st.write("**Length Comparison**")
                             img_buffer = plot_lengths(cleaned_text, summary)
                             st.image(img_buffer, use_container_width=True)
                         
                         with viz_col2:
-                            # Display pie chart (새로 추가!)
                             st.write("**Content Distribution**")
                             pie_buffer = plot_pie_chart(cleaned_text, summary)
                             st.image(pie_buffer, use_container_width=True)
                         
                         with viz_col3:
-                            # Display statistics
                             st.write("**Statistics**")
                             
-                            # 통계 계산
+                            # Calculate statistics
                             stats = create_stats_dict(cleaned_text, summary)
                             
-                            # 메트릭 표시
+                            # Display metrics
                             st.metric("Original", f"{stats['original_chars']:,} chars")
                             st.caption(f"{stats['original_words']:,} words")
                             
@@ -167,7 +161,7 @@ if st.button("🚀 Summarize", type="primary"):
                             st.metric("Compression", f"{stats['compression_rate']}%")
                             st.caption(f"Kept: {stats['reduction_rate']}%")
                         
-                        # Additional detailed info (접을 수 있는 섹션)
+                        # Additional detailed info
                         with st.expander("📈 Detailed Statistics"):
                             detail_col1, detail_col2 = st.columns(2)
                             
@@ -191,26 +185,26 @@ if st.button("🚀 Summarize", type="primary"):
 with st.expander("ℹ️ About this app"):
     st.markdown("""
     ### Features:
-    - 🇰🇷 **Korean** summarization using KoBART
-    - 🇺🇸 **English** summarization using BART-CNN
-    - 🔄 Automatic language detection
-    - 📊 Visual comparison with bar chart and pie chart
-    - 📈 Detailed statistics
+    - 🇺🇸 **English** text summarization using BART-CNN
+    - 🎯 **Flexible summary lengths**: Short / Medium / Long
+    - 📊 **Visual analytics**: Bar charts, pie charts, and detailed statistics
+    - 🖥️ **User-friendly interface**: Built with Streamlit
     
     ### How it works:
-    1. Enter or paste your text (minimum 50 characters)
+    1. Enter or paste your English text (minimum 50 characters)
     2. Choose summary length (Short/Medium/Long)
     3. Click Summarize button
     4. View results with visual comparisons
     
     ### Visualizations:
-    - **Bar Chart**: Compares character length
-    - **Pie Chart**: Shows content kept vs removed
-    - **Statistics**: Detailed metrics and compression rate
+    - **Bar Chart**: Compares character length between original and summary
+    - **Pie Chart**: Shows content distribution (kept vs removed)
+    - **Statistics Panel**: Detailed metrics including compression rate
     
-    ### Models used:
-    - Korean: [gogamza/kobart-summarization](https://huggingface.co/gogamza/kobart-summarization)
-    - English: [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
+    ### Model used:
+    - [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
+    - Fine-tuned on CNN/DailyMail dataset
+    - Optimized for news article and general text summarization
     
     ### Credits:
     Created by Jisoo Lee, Jisoo Kang, Hyunsoo Kim, Jiwoo Yang, Hosung Yoon
