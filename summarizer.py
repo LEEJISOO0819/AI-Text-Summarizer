@@ -92,27 +92,27 @@ class TextSummarizer:
             
             if language == 'en':
                 # 영어: 1 토큰 ≈ 4-5 문자
-                # target_chars를 토큰으로 변환
-                if target_chars <= 100:  # Short
-                    max_tokens = 30
-                    min_tokens = 15
-                elif target_chars <= 200:  # Medium
-                    max_tokens = 60
-                    min_tokens = 30
-                else:  # Long
-                    max_tokens = 120
-                    min_tokens = 60
-            else:
-                # 한국어: 1 토큰 ≈ 2-3 문자
-                if target_chars <= 100:  # Short
+                # BART 모델은 min_length에 가깝게 생성하는 경향이 있어서 더 줄여야 함
+                if target_chars <= 100:  # Short (~80 chars)
+                    max_tokens = 20
+                    min_tokens = 10
+                elif target_chars <= 200:  # Medium (~150 chars)
                     max_tokens = 40
                     min_tokens = 20
-                elif target_chars <= 200:  # Medium
-                    max_tokens = 80
+                else:  # Long (~350 chars)
+                    max_tokens = 100
+                    min_tokens = 50
+            else:
+                # 한국어: 1 토큰 ≈ 2-3 문자
+                if target_chars <= 100:  # Short (~80 chars)
+                    max_tokens = 35
+                    min_tokens = 20
+                elif target_chars <= 200:  # Medium (~150 chars)
+                    max_tokens = 70
                     min_tokens = 40
-                else:  # Long
-                    max_tokens = 150
-                    min_tokens = 75
+                else:  # Long (~350 chars)
+                    max_tokens = 140
+                    min_tokens = 80
             
             print(f"Target: {target_chars} chars → Tokens: max={max_tokens}, min={min_tokens}")
             
