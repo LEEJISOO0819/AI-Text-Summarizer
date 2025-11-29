@@ -1,82 +1,321 @@
-# AI Text Summarizer Installation & Execution Guide
+# 📦 AI Text Summarizer - Installation & Execution Guide
 
-1. Project Overview
-   -The AI Text Summarizer is a Streamlit-based web application that automatically summarizes long Korean or English texts. It also provides visualization features such as bar charts, pie charts and statistical summaries.
+## 1. Project Overview
 
-2. System Requirements
-   - OS: Windows / MacOS
-   - Python: Version 3.10 or higher
-   - Required Packages(from requirements.txt):
-     1) transformers
-     2) torch
-     3) streamlit
-     4) sentencepiece
-     5) protobuf
-     6) regex
-     7) matplotlib
+The **AI Text Summarizer** is a Streamlit-based web application that automatically summarizes long **English texts**. It provides visualization features such as bar charts, pie charts, and statistical summaries.
 
-3. Installation
-   1) Clone the repository(bash)
-      git clone https://github.com/your-team-repo/AI-Text-Summarizer.git
-   2) Move into the project directory(bash)
-   cd AI-Text-Summarizer
-   3) (optional) Create a virtual environment(nginx)
-      python -m venv venv
-   -Windows:  venv\Scripts\activate
-   -Mac(bash): source venv/bin/activate
+---
 
-   4) Install dependencies(nginx)
-  pip install -r requirements.txt
+## 2. System Requirements
 
+### Minimum Requirements
+- **OS**: Windows 10/11 or macOS 10.15+
+- **Python**: Version 3.10 or higher
+- **RAM**: 4GB minimum (8GB recommended)
+- **Disk Space**: 3GB free space (for model download)
+- **Internet**: Required for first-time model download (~1.5GB)
 
-4. How to Run the Application
-   - Run the following command to start the Streamlit app:(arduino)
-    streamlit run app.py
- 
-   - Your browser will automatically open the app at:(arduino)
-     http://localhost:8501
+### Required Packages
+(from `requirements.txt`):
+1. `transformers` - AI model framework
+2. `torch` - Deep learning library
+3. `streamlit` - Web interface
+4. `sentencepiece` - Text tokenization
+5. `protobuf` - Data serialization
+6. `regex` - Regular expressions
+7. `matplotlib` - Data visualization
 
-     
-5. Execution Screen
+---
 
-<img width="2047" height="1165" alt="스크린샷 2025-11-25 164003" src="https://github.com/user-attachments/assets/ee6620a1-9d8a-4fe5-9a9f-58b0a75a1fb2" />
-<img width="2047" height="1170" alt="스크린샷 2025-11-25 164232" src="https://github.com/user-attachments/assets/46e8e534-aa24-4b68-9e11-96c8e9093cb1" />
+## 3. Installation Steps
 
+### Step 1: Clone the Repository
 
+```bash
+git clone https://github.com/LEEJISOO0819/AI-Text-Summarizer.git
+```
 
+### Step 2: Navigate to Project Directory
 
-6. Key Features
-   - Automatic Korean/English language detection
-   - Summarization using KoBART / BART CNN models
-   - summary lingth options: SHort / Medium / Long
-   - Bar chart visualization (content distribution)
-   - Detailed statistics: character count, word count, sentence count, compression rate
+```bash
+cd AI-Text-Summarizer
+```
 
-7. Example Directory Structure
+### Step 3: (Optional) Create Virtual Environment
 
+**Recommended for keeping dependencies isolated**
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+You should see `(venv)` prefix in your terminal.
+
+### Step 4: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+**Note**: First installation may take 5-10 minutes depending on your internet speed.
+
+---
+
+## 4. How to Run the Application
+
+### Launch Command
+
+```bash
+streamlit run app.py
+```
+
+### Expected Output
+
+```
+You can now view your Streamlit app in your browser.
+
+Local URL: http://localhost:8501
+Network URL: http://192.168.x.x:8501
+```
+
+Your browser will automatically open the app at: `http://localhost:8501`
+
+---
+
+## 5. Application Screenshots
+
+### Main Interface
+![Main Interface](screenshots/main_interface.png)
+
+### Summary Results with Visualization
+![Summary Result](screenshots/result.png)
+
+---
+
+## 6. Key Features
+
+✅ **English Text Summarization**
+- Powered by BART-CNN model
+- Trained on CNN/DailyMail dataset
+
+✅ **Flexible Summary Lengths**
+- **Short**: ~100 characters
+- **Medium**: ~150-200 characters
+- **Long**: ~300-400 characters
+
+✅ **Visual Analytics**
+- Bar chart (length comparison)
+- Pie chart (content distribution)
+- Detailed statistics panel
+
+✅ **Statistical Metrics**
+- Character count
+- Word count
+- Sentence count
+- Compression rate
+
+---
+
+## 7. Project Directory Structure
+
+```
 AI-Text-Summarizer/
-│── app.py
-│── preprocess.py
-│── summarizer.py
-│── visualize.py
-│── requirements.txt
-│── INSTALL.md
-│── screenshots/result.png
-│── tests/
+│
+├── app.py                  # Main Streamlit application
+├── summarizer.py           # AI summarization logic (BART-CNN)
+├── preprocess.py           # Text preprocessing and cleaning
+├── visualize.py            # Visualization functions (charts, statistics)
+├── requirements.txt        # Python dependencies
+├── README.md              # Project documentation
+├── INSTALL.md             # This file
+│
+├── __pycache__/           # Python cache files (auto-generated)
+├── screenshots/           # Application screenshots
+│   └── result.png
+│
+└── tests/                 # Test files
+    └── preprocess_test.py
+```
 
-8. Troubleshooting
-   - Streamlit error -> pip install streamlit
-   - Transformers import error -> pip install transformers sentencepiece protobuf
-   - Model dounloading is slow -> The first run may take 1-3 minutes (this is normal)
-  
-9. Contributors
-    Team Members: Jisoo Lee, Jisoo Kang, Hyunsoo Kim, Jiwoo Yang, Hosung Yoon
+---
 
+## 8. Troubleshooting
 
+### Issue 1: "streamlit: command not found"
 
+**Solution:**
+```bash
+pip install streamlit
+# or
+python -m pip install streamlit
+```
 
+### Issue 2: "No module named 'transformers'"
 
+**Solution:**
+```bash
+pip install transformers sentencepiece protobuf
+```
 
-   
+### Issue 3: Model Download is Slow
 
-      
+**This is normal!** The first run downloads BART-CNN model (~1.5GB).
+
+Expected time: 1-3 minutes with stable internet connection.
+
+### Issue 4: "Text too short" Error
+
+**Solution:** Input text must be at least **50 characters** long.
+
+### Issue 5: Charts Not Displaying
+
+**Solution:**
+```bash
+pip install matplotlib
+```
+
+### Issue 6: Port 8501 Already in Use
+
+**Solution:** Specify a different port:
+```bash
+streamlit run app.py --server.port 8502
+```
+
+---
+
+## 9. Usage Example
+
+### Basic Workflow
+
+1. **Start the application**
+   ```bash
+   streamlit run app.py
+   ```
+
+2. **Choose input method**
+   - Type/paste English text directly (minimum 50 characters)
+   - Select from example texts in sidebar
+
+3. **Select summary length**
+   - Short / Medium / Long
+
+4. **Click "Summarize" button**
+   - Wait for processing (first run: 1-2 minutes)
+   - View results with visualizations
+
+### Code Example
+
+```python
+from summarizer import summarize_text
+from preprocess import clean_text
+
+# Input text
+text = """
+Your long English text here...
+(minimum 50 characters)
+"""
+
+# Clean and preprocess
+cleaned_text, error = clean_text(text, min_length=50)
+
+if not error:
+    # Generate summary (target 150 characters)
+    summary = summarize_text(cleaned_text, target_chars=150)
+    print(summary)
+else:
+    print(f"Error: {error}")
+```
+
+---
+
+## 10. Model Information
+
+### English Summarization Model
+- **Model**: [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
+- **Architecture**: BART-Large
+- **Training Data**: CNN/DailyMail dataset
+- **Max Input**: 1024 characters
+- **Model Size**: ~1.5GB
+- **Downloaded automatically** on first run
+
+---
+
+## 11. Platform-Specific Notes
+
+### Windows Users
+
+Use **Command Prompt** or **PowerShell**:
+```cmd
+# Navigate to project
+cd C:\path\to\AI-Text-Summarizer
+
+# Activate virtual environment
+venv\Scripts\activate
+
+# Run app
+streamlit run app.py
+```
+
+### macOS/Linux Users
+
+Use **Terminal**:
+```bash
+# Navigate to project
+cd ~/path/to/AI-Text-Summarizer
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Run app
+streamlit run app.py
+```
+
+---
+
+## 12. Contributors
+
+**Team Members:**
+- **Jisoo Lee** - Team Leader, Core Development
+- **Jisoo Kang** - Visualization Module
+- **Hyunsoo Kim** - Testing & Documentation
+- **Jiwoo Yang** - Preprocessing Module
+- **Hosung Yoon** - UI/UX Design
+
+---
+
+## 13. Additional Resources
+
+- **GitHub Repository**: [https://github.com/LEEJISOO0819/AI-Text-Summarizer](https://github.com/LEEJISOO0819/AI-Text-Summarizer)
+- **Report Issues**: [GitHub Issues](https://github.com/LEEJISOO0819/AI-Text-Summarizer/issues)
+- **Contact Email**: dearjis00@naver.com
+
+---
+
+## ✅ Post-Installation Checklist
+
+- [ ] Python 3.10+ installed and verified
+- [ ] All dependencies installed successfully (`pip install -r requirements.txt`)
+- [ ] Virtual environment activated (optional but recommended)
+- [ ] Application launches without errors (`streamlit run app.py`)
+- [ ] Browser opens at localhost:8501
+- [ ] Can input English text and generate summaries
+- [ ] Short/Medium/Long options produce different length summaries
+- [ ] Charts and visualizations display correctly
+
+---
+
+**🎉 Installation Complete!**
+
+You're now ready to use the AI Text Summarizer. For detailed usage instructions, see [README.md](README.md).
+
+---
+
+**⭐ If you find this project useful, please give it a star on GitHub!**
