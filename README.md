@@ -15,7 +15,7 @@ An intelligent text summarization tool that automatically detects language (Kore
 
 ## ✨ Features
 
-- 🌐 **Bilingual Support**: Automatically detects and processes both Korean and English text
+- 🇺🇸 **English Text Summarization**: Powered by BART-CNN model
 - 🎯 **Flexible Summary Length**: Choose between Short, Medium, or Long summaries
 - 📊 **Visual Analytics**: Interactive charts showing compression statistics
 - 🖥️ **User-Friendly Interface**: Built with Streamlit for easy interaction
@@ -128,12 +128,6 @@ AI-Text-Summarizer/
 - **visualize.py**: Generates comparison charts and calculates statistics
 
 ## 🤖 Models
-
-### Korean Summarization
-- **Model**: [gogamza/kobart-summarization](https://huggingface.co/gogamza/kobart-summarization)
-- **Architecture**: KoBART (Korean BART)
-- **Max Input**: 3000 characters
-- **Use Case**: Optimized for Korean text summarization
 
 ### English Summarization
 - **Model**: [facebook/bart-large-cnn](https://huggingface.co/facebook/bart-large-cnn)
