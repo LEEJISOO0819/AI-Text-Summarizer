@@ -1,6 +1,18 @@
-from transformers import pipeline
+# test_summary.py
+"""
+Simple test script for AI Text Summarizer
+"""
 
-summarizer = pipeline("summarization")
-text = "Artificial intelligence is transforming the world by enabling machines to perform tasks that previously required human intelligence."
-summary = summarizer(text, max_length=50, min_length=25, do_sample=False)
-print(summary[0]['summary_text'])
+def test_summarizer():
+    from summarizer import summarize_text
+    
+    text = "Artificial intelligence is transforming our world. " * 10
+    
+    print("Testing summarizer...")
+    summary = summarize_text(text, target_chars=150)
+    print(f"✅ Summary generated: {len(summary)} chars")
+    assert len(summary) > 0, "Summary should not be empty"
+    print("✅ All tests passed!")
+
+if __name__ == "__main__":
+    test_summarizer()
