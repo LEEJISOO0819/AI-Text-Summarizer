@@ -319,3 +319,5 @@ You're now ready to use the AI Text Summarizer. For detailed usage instructions,
 ---
 
 **⭐ If you find this project useful, please give it a star on GitHub!**
+
+
